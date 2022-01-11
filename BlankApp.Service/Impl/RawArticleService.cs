@@ -51,7 +51,7 @@ namespace BlankApp.Service.Impl
             {
                 Article article = new Article();
                 article.Type = ArticleTypes.Normal;
-                article.Mask = _ms.Simplify(key) ?? key;
+                article.Mask = key;
                 article.IsGroup = true;
                 article.Detail = detail.Clone();
                 article.Detail.Title = key;
@@ -63,23 +63,30 @@ namespace BlankApp.Service.Impl
         {
             Article article = new Article();
             article.Type = ArticleTypes.Normal;
-            article.Mask = _ms.Simplify(detail.Title) ?? detail.Title;
+            article.Mask = detail.Title;
             article.Detail = detail.Clone();
             return article;
         }
 
         public override Article[] Read(string artiPath)
         {
-            string txt = GetTxtFileName(artiPath);
-            string[] pdfs = GetPdfFileName(artiPath);
+            //string txt = GetTxtFileName(artiPath);
+            //string[] pdfs = GetPdfFileName(artiPath);
+            string[] files = Directory.GetFiles(artiPath, "*", SearchOption.TopDirectoryOnly);
+            string[] pdfs = files.Where(f => f.EndsWith(".pdf")).ToArray();
+            string txt = files.Where(f => f.EndsWith(".txt")).FirstOrDefault();
+
+            //string[] pdfs = Directory.GetFiles(artiPath, "*.pdf", SearchOption.TopDirectoryOnly).ToArray();
+            //string txt = Directory.GetFiles(artiPath, "*.txt", SearchOption.TopDirectoryOnly).FirstOrDefault();
+
             List<Article> articles = new List<Article>();
-            if( !string.IsNullOrEmpty(txt))
+            if (!string.IsNullOrEmpty(txt))
             {
                 Detail detail = ReadTxtProperties(txt);
-                if( detail.Title.Contains('-'))
+                if (detail.Title.Contains('-'))
                 {
                     Article[] artis = ExtractGroupArticle(detail);
-                    Array.ForEach(artis, a => 
+                    Array.ForEach(artis, a =>
                     {
                         a.TxtPath = txt;
                         a.PdfPaths = pdfs;
@@ -97,6 +104,9 @@ namespace BlankApp.Service.Impl
                 }
             }
             return articles.ToArray();
+
+            //return Read(files);
         }
+
     }
 }

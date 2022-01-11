@@ -14,6 +14,8 @@ namespace BlankApp.Cli
         Cover,
         Catalog,
         Archive,
+        Article,
+        SQL,
         Other
     }
 
@@ -33,11 +35,17 @@ namespace BlankApp.Cli
 
 
         private CompleteTypes _complete;
+
+
+
+        private string _example;
+        public string Example { get => _example; }
         public CompleteTypes Complete { get => _complete;  }
-        public StatusAttribute(StatuTypes type, CompleteTypes complete)
+        public StatusAttribute(StatuTypes type, CompleteTypes complete, string example = "")
         {
             this._type = type;
             this._complete = complete;
+            this._example = example;
         }
     }
 }

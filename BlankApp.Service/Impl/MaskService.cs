@@ -13,24 +13,6 @@ namespace BlankApp.Service.Impl
         {
             this._configurationService = configurationService;
         }
-        public string Complex(string str)
-        {
-            TitleObject[] titles = _configurationService["Titles"] as TitleObject[];
-            TitleObject title = titles.Where(t => t.Mask.Contains(str)).FirstOrDefault();
-
-            return title?.Name ?? null;
-        }
-
-
-
-        public string Simplify(string str)
-        {
-            TitleObject[] titles = _configurationService["Titles"] as TitleObject[];
-            TitleObject title =  titles.Where(t => t.Name.Contains(str)).FirstOrDefault();
-
-            return title?.Mask ?? null;
-        }
-
 
         public int[] ComplexNumbers(string str)
         {

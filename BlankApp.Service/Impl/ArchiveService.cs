@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace BlankApp.Service.Impl
 {
@@ -18,15 +19,17 @@ namespace BlankApp.Service.Impl
         {
             this._cs = configurationService;
             this._as = articleService;
+            ThreadPool.SetMinThreads(1, 1);
+            ThreadPool.SetMaxThreads(5, 5);
         }
 
         public bool IsArchiveDirectory(string str)
         {
             string first = Path.GetFileNameWithoutExtension(str);
-            first = first.Substring(0,4);
-            // Regex regex = new Regex(@"^\d{4}?");
-            int i = 0;
-            return Directory.Exists(str) && int.TryParse(first, out i);
+            //first = first.Substring(0,4);
+            //int i = 0;
+            //return Directory.Exists(str) && int.TryParse(first, out i);
+            return Regex.IsMatch(str, @"^\d{4}?") || Regex.IsMatch(Path.GetFileName(str), @"^\d{4}?");
         }
 
         /*
@@ -159,15 +162,33 @@ namespace BlankApp.Service.Impl
         }
         public Archive Read(string archivesPath)
         {
-
+            AutoResetEvent myEvent = new AutoResetEvent(false);
             string[] paths = Directory.GetDirectories(archivesPath, "*", SearchOption.TopDirectoryOnly);
             Archive archives = ExtractIdentifier(archivesPath);
             archives.Nodes = new ObservableCollection<Article>();
+            
+            int count = paths.Length;
+            
             foreach (string path in paths)
             {
-                Article[] article = _as.Read(path);
-                archives.Nodes.AddRange(article);
+
+               ThreadPool.QueueUserWorkItem(
+                    new WaitCallback((obj) =>
+                    {
+                        Article[] article = _as.Read(obj.ToString());
+                        lock (this) 
+                        {
+                            archives.Nodes.AddRange(article);
+                            if (--count <= 0)
+                            {
+                                myEvent.Set();
+                            }
+                        }
+                        
+                    }), path);
             }
+            myEvent.WaitOne();
+            
             archives.Detail = ExtractSummary(archives.Nodes);
 
 

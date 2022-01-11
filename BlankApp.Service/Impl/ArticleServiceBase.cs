@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace BlankApp.Service.Impl
 {
@@ -31,11 +32,12 @@ namespace BlankApp.Service.Impl
             }
             // 获取 id
             string id = "";
-            if (name.Contains('.'))
+            if (name.Contains('.') || Regex.IsMatch(name, @"^\d{2}?"))
             {
                 id = name.Substring(0, 2);
-                name = name.Substring(3);
+                name = name.Substring(2);
             }
+            
             //获取说明
             string caption = "";
             int l = name.IndexOf('{');

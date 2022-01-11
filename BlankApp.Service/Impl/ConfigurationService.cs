@@ -1,8 +1,13 @@
-﻿using BlankApp.Service.Model;
+﻿using BlankApp.Configuration;
+using BlankApp.Configuration.Models;
+using BlankApp.Service.Model;
 using BlankApp.Service.Model.Object;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 
@@ -10,56 +15,32 @@ namespace BlankApp.Service.Impl
 {
     public class ConfigurationService : IConfigurationService
     {
-        private string[] _positions;
-        private TitleObject[] _titles;
-        private ProjectObject[] _projects;
-        private string _cfgFilePath = "Config/dirinfo.json";
+        public Dictionary<string, BlankApp.Configuration.Models.Project> Projects => Settings.Projects;
+        public Dictionary<string, string> AppSettings => Settings.AppSettings;
 
         public object this[string str]
-        {
+        { 
             get
             {
-                if (str.Equals("Titles"))
+                object v = Settings.AppSettings[str] as object;
+                if( v == null && Settings.Projects.ContainsKey(str))
                 {
-                    return this._titles;
+                    v = Settings.Projects[str] ;
                 }
-                else if (str.Equals("Projects"))
-                {
-                    return this._projects;
-                }
-                else if (str.Equals("Positions"))
-                {
-                    return this._positions;
-                }
-                return null;
+                return v;
+                
             }
         }
-
-
         public ConfigurationService()
         {
-            string path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            _cfgFilePath =  Path.Combine(path, "Config", "dirinfo.json");
-            Reflash();
+            Settings.Empty();
         }
 
-        public void Reflash()
-        {
-            using (System.IO.StreamReader file = System.IO.File.OpenText(_cfgFilePath))
-            {
-                using (JsonTextReader reader = new JsonTextReader(file))
-                {
-                    JObject o = (JObject)JToken.ReadFrom(reader);
-          
-                    this._projects = o["Projects"].ToObject<ProjectObject[]>();
-                    this._positions = o["Positions"].ToObject<string[]>();
-                    this._titles = o["Titles"].ToObject<TitleObject[]>();
-                }
-            }
-        }
 
         public WidthPair[] ReadWidthPairs(string cfgPath)
         {
+
+   
             string[] lines = File.ReadAllLines(cfgPath);
             WidthPair[] widthPairs = new WidthPair[lines.Length];
             for (int i = 0; i < lines.Length; i++)

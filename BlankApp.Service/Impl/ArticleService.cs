@@ -11,8 +11,7 @@ namespace BlankApp.Service.Impl
     public class Info
     {
         public string Id { get; set; }
-        public string Name { get; set; }
-        public string Caption { get; set; }
+        public string Title { get; set; }
         public string Copies { get; set; }
     }
 
@@ -22,110 +21,56 @@ namespace BlankApp.Service.Impl
 
         public override bool IsArticleDirectory(string str)
         {
-            string first = Path.GetFileName(str);
-            first = first.Trim().Split('-').First();
-            Regex regex = new Regex(@"^\d{2}\.[\u4e00-\u9fa5]+");
-            return regex.Match(first ?? "").Success;
+            string name = Path.GetFileName(str);
+ 
+            Regex regex = new Regex(@"^\d{2}[\u4e00-\u9fa5]+");
+            return regex.Match(name ?? "").Success;
         }
         public override Article[] Read(string artiPath)
         {
             if( IsArticleDirectory(artiPath))
             {
                 string path = Path.GetFileName(artiPath);
-                Article[] articles = ExtractArticle(path);
+                ArticleToken articleToken = GetArticleToken(path);
+                Article article = new Article();
+                article.Mask = articleToken.Name;
+                article.Id = int.Parse(articleToken.Id);
 
-                string txt = Path.Combine(artiPath, _txtFileName);
+                string txt = Path.Combine(artiPath, articleToken.Name + ".txt");
                 if (File.Exists(txt))
                 {
-                    Detail detail = ReadTxtProperties(txt);
-                    string[] ss = detail.Title.Split('-');
-                    for (int i = 0; i < ss.Length; i++)
-                    {
-                        articles[i].Detail = detail.Clone();
-                    }
-
+                    article.Detail = ReadTxtProperties(txt);
+                    article.TxtPath = txt;
                 }
-                return articles;
+
+                string pdf = Path.Combine(artiPath, articleToken.Name + ".pdf");
+                if (File.Exists(pdf))
+                {
+                    article.PdfPaths = new string[1] { pdf } ;
+                }
+                return new Article[1] { article };
             }
             return null;
         }
-        public override string GetTxtFileName(string artiPath)
+        private Article ExtractArticleInfo(string artiPath)
         {
-            Info[] infos = ExtractInfo(artiPath);
-            string name = "";
-            foreach (Info info in infos)
+            string name = Path.GetFileName(artiPath);
+            string copies = "";
+            string id = name.Substring(0, 2);
+            name = name.Remove(0, 2);
+            while (name[name.Length - 1] >= '0' && name[name.Length - 1] <= '9')
             {
-                name += info.Name + "-";
+                copies = copies.Insert(0, name.Last().ToString());
+                name = name.Remove(name.Length - 1);
             }
-            name.Remove(name.Length - 1);
-            return Path.Combine(name, ".txt");
-        }
-        private Info[] ExtractInfo(string artiPath)
-        {
-            string file = Path.GetFileName(artiPath);
-            string[] split = file.Split('-');
-            Info[] ret = new Info[split.Length];
-            for (int i = 0; i < split.Length; i++)
-            {
-                Info info = new Info();
-                string name = split[i];
-                // 获取份数并去掉
-                string copies = "";
-                if(split.Length > 1)
-                {
-                    copies = 1.ToString();
-                }
-                else
-                {
-                    while (name[name.Length - 1] >= '0' && name[name.Length - 1] <= '9')
-                    {
-                        copies = copies.Insert(0, name.Last().ToString());
-                        name = name.Substring(0, name.Length - 1);
-                    }
-                }
-                info.Caption = copies;
-                // id
-                if (name.Contains('.'))
-                {
-                    info.Id = name = name.Substring(3);
-                }
-                // caption
-                int l = name.IndexOf('{');
-                int r = name.LastIndexOf('}');
-                if (l >= 0 && r >= 1)
-                {
-                    string[] names = name.Split('{', '}');
-                    string namel = names[0];
-                    string namer = names[2];
-                    string caption = names[1];
-                    info.Name = namel + namer;
-                    info.Caption = caption;
-                }
-                
-                ret[i] = info;
-            }
-            return ret;
-        }
-        private Article[] ExtractArticle(string artiPath)
-        {
 
-               Info[] infos = ExtractInfo(artiPath);
-            Article[] ret = new Article[infos.Length];
-            for (int i = 0; i < infos.Length; i++)
-            {
-                ret[i] = new Article();
-                ret[i].Id = int.Parse(infos[i].Id);
-                ret[i].Mask = infos[i].Name;
-                ret[i].Caption = infos[i].Caption;
-                ret[i].IsGroup = false;
 
-            }
-            //isgroup
-            for (int i = 0; i < ret.Length && ret.Length > 1; i++)
-            {
-                ret[i].IsGroup = true;
-            }
-            return ret;
+            Article article = new Article();
+            article.Id = int.Parse(id);
+            article.Mask = name;
+            article.Caption = copies;
+
+            return article;
         }
 
         public override bool IsMultipleArticleDirectory(string str)
@@ -137,5 +82,12 @@ namespace BlankApp.Service.Impl
         {
             throw new System.NotImplementedException();
         }
+
+        public override string GetTxtFileName(string artiPath)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
     }
 }
