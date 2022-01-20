@@ -15,17 +15,19 @@ namespace BlankApp.Service.Impl
 {
     public class ConfigurationService : IConfigurationService
     {
-        public Dictionary<string, BlankApp.Configuration.Models.Project> Projects => Settings.Projects;
+        public Dictionary<string, BlankApp.Configuration.Models.Project> ProjectSettings => Settings.ProjectSettings;
         public Dictionary<string, string> AppSettings => Settings.AppSettings;
+
+        public NameValueCollection Correction => Settings.GetSection("correction") as NameValueCollection;
 
         public object this[string str]
         { 
             get
             {
                 object v = Settings.AppSettings[str] as object;
-                if( v == null && Settings.Projects.ContainsKey(str))
+                if( v == null && Settings.ProjectSettings .ContainsKey(str))
                 {
-                    v = Settings.Projects[str] ;
+                    v = Settings.ProjectSettings[str] ;
                 }
                 return v;
                 
@@ -63,6 +65,16 @@ namespace BlankApp.Service.Impl
             }
 
             return widthPairs;
+        }
+
+        public string Get(string section, string key)
+        {
+            return Settings.Get(section, key);
+        }
+
+        public NameValueCollection GetSection(string section)
+        {
+            return Settings.GetSection(section) as NameValueCollection;
         }
     }
 }

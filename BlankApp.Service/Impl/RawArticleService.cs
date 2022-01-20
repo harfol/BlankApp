@@ -54,6 +54,7 @@ namespace BlankApp.Service.Impl
                 article.Mask = key;
                 article.IsGroup = true;
                 article.Detail = detail.Clone();
+                article.Detail.Pages = "1";
                 article.Detail.Title = key;
                 articles.Add(article);
             }

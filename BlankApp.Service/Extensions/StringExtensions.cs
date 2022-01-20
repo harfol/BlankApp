@@ -30,8 +30,15 @@ namespace BlankApp.Service.Extensions
                 if (coding.GetByteCount(ch.ToString()) == 2)
                     dcount++;
             }
-            string w = str.PadRight(totalByteCount - dcount, c);
-            return w;
+
+            if(totalByteCount > dcount)
+            {
+                return str.PadRight(totalByteCount - dcount, c);
+            }
+            else
+            {
+                return str;
+            }
         }
     }
 }

@@ -268,9 +268,9 @@ namespace BlankApp.Cli
             {
                 // 输出项目信息
                 Console.WriteLine("项目列表：");
-                for (int i = 0; i < _configurationService.Projects.Count; i++)
+                for (int i = 0; i < _configurationService.ProjectSettings.Count; i++)
                 {
-                    Console.WriteLine("{0,-3:D} {1}", i + 1, _configurationService.Projects.ElementAt(i).Value.Describe);
+                    Console.WriteLine("{0,-3:D} {1}", i + 1, _configurationService.ProjectSettings.ElementAt(i).Value.Describe);
                 }
 
                 Console.WriteLine("条例列表：");
@@ -292,7 +292,7 @@ namespace BlankApp.Cli
                 int nn = int.Parse(str.Split(' ')[0]);
                 int nu = int.Parse(str.Split(' ')[1]);
 
-                string projectName = _configurationService.Projects.ElementAt(nn - 1).Value.Describe;
+                string projectName = _configurationService.ProjectSettings.ElementAt(nn - 1).Value.Describe;
                 string path = Path.Combine(archPath, "征地档案封面.docx");
                 string title = articles[nu].Detail.Title;
                 string sub = articles[nu].Detail.SubTitle;
@@ -784,8 +784,8 @@ namespace BlankApp.Cli
                             string name;
                             if(Yes("是否按照项目路径生成xlsx"))
                             {
-                                name = _configurationService.Projects.ContainsKey(proName) ?
-                                    _configurationService.Projects[proName].Describe : null;
+                                name = _configurationService.ProjectSettings.ContainsKey(proName) ?
+                                    _configurationService.ProjectSettings[proName].Describe : null;
                             }
                             else
                             {
@@ -985,5 +985,10 @@ namespace BlankApp.Cli
 
 
         #endregion
+        [Status(StatuTypes.Other, CompleteTypes.Debug)]
+        public void 测试()
+        {
+            
+        }
     }
 }
