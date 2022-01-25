@@ -8,10 +8,7 @@ namespace BlankApp.Service
     {
         Dictionary<string, BlankApp.Configuration.Models.Project> ProjectSettings { get; }
         Dictionary<string, string>  AppSettings { get; }
-         NameValueCollection Correction { get; }
-        string Get(string section, string key);
-
-        NameValueCollection GetSection(string section);
+        Dictionary<string, string> CorrectionSettings { get; }
         object this[string str] { get; }
         WidthPair[] ReadWidthPairs(string cfgPath);
     }

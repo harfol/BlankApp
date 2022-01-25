@@ -1,6 +1,8 @@
 ﻿using BlankApp.Service.Model;
 using iTextSharp.text;
+using iTextSharp.text.io;
 using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +24,7 @@ namespace BlankApp.Service.Impl
 
         public ArticleToken GetArticleToken(string artiPath)
         {
-            string name =  Path.GetFileName(artiPath);
+            string name = System.IO.Path.GetFileName(artiPath);
             // 获取 份数， 修改名称
             string copies = "";
             while (name.Last() >= '0' && name.Last() <= '9')
@@ -60,7 +62,7 @@ namespace BlankApp.Service.Impl
         }
         public ArticleToken[] GetArticleTokens(string artiPath)
         {
-            string file = Path.GetFileName(artiPath);
+            string file = System.IO.Path.GetFileName(artiPath);
             string[] split = file.Split('-');
             ArticleToken[] ret = new ArticleToken[split.Length];
 
@@ -109,8 +111,8 @@ namespace BlankApp.Service.Impl
             {
                 if (!File.Exists(txtFile))
                 {
-                    string path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-                    File.Copy(Path.Combine(path, "Template", "信息.txt"), txtFile);
+                    string path = System.IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+                    File.Copy(System.IO.Path.Combine(path, "Template", "信息.txt"), txtFile);
 
                 }
 
@@ -150,13 +152,13 @@ namespace BlankApp.Service.Impl
             List<string> pdfs = new List<string>();
             using (var reader = new PdfReader(pdfPath))
             {
-                string dir = Path.GetDirectoryName(pdfPath);
+                string dir = System.IO.Path.GetDirectoryName(pdfPath);
                 // 注意起始页是从1开始的
                 for (int i = 1; i <= reader.NumberOfPages; i++)
                 {
                     using (var sourceDocument = new Document(reader.GetPageSizeWithRotation(i)))
                     {
-                        string pdf = Path.Combine(dir, $"{i}.pdf");
+                        string pdf = System.IO.Path.Combine(dir, $"{i}.pdf");
                         var pdfCopyProvider = new PdfCopy(sourceDocument, new FileStream(pdf, FileMode.Create));
                         sourceDocument.Open();
                         var importedPage = pdfCopyProvider.GetImportedPage(reader, i);
@@ -167,23 +169,16 @@ namespace BlankApp.Service.Impl
             }
             return pdfs.ToArray();
         }
-        public string GetPdfTxtPage0(string artiPath)
+        public string GetPdfTxtPage0(string pdfPath)
         {
-            return "";
-/*            string pdfPath = Directory.GetFiles(artiPath, "*.pdf", SearchOption.TopDirectoryOnly).FirstOrDefault();
-            //实例化一个PdfDocument对象
-            PdfDocument doc = new PdfDocument();
-
-            //加载PDF文档
-            doc.LoadFromFile(pdfPath);
-
-            //实例化一个StringBuilder 对象
-            StringBuilder content = new StringBuilder();
-
-            //提取PDF,0页面的文本
-            content.Append(doc.Pages[0].ExtractText());
-
-            return content.ToString().Trim().Replace(" ", "");*/
+            string s = null;
+            StreamUtil.AddToResourceSearch(System.Reflection.Assembly.LoadFile(@"C:\Users\admin\source\repos\BlankApp\bin\Debug\iTextAsian.dll"));
+            StreamUtil.AddToResourceSearch(System.Reflection.Assembly.LoadFile(@"C:\Users\admin\source\repos\BlankApp\bin\Debug\iTextAsianCmaps.dll"));
+            using (PdfReader reader = new PdfReader(pdfPath))
+            {
+                s = PdfTextExtractor.GetTextFromPage(reader, 1, new LocationTextExtractionStrategy()); ;
+            }
+            return s;
         }
 
 

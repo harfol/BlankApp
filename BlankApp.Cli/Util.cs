@@ -242,6 +242,8 @@ namespace BlankApp.Cli
         #endregion
 
         #region 条目操作
+
+
         [Status(StatuTypes.Article, CompleteTypes.Finish)]
         public void 创建条目(string archPath, string title)
         {
@@ -256,6 +258,63 @@ namespace BlankApp.Cli
             }
         }
 
+        [Status(StatuTypes.Article, CompleteTypes.Finish)]
+        public void 插入条目(string artiPath)
+        {
+            string archPath = Path.GetDirectoryName(artiPath);
+            string name = Path.GetFileName(artiPath);
+            if (Regex.IsMatch(name, @"^\d{2}\D?"))
+            {
+                string[] dirs = Directory.GetDirectories(archPath, "*", SearchOption.TopDirectoryOnly);
+                string no = name.Substring(0, 2);
+                for (int i = dirs.Length - 1; i >= 0; i--)
+                {
+                    string dirno = Path.GetFileName(dirs[i]).Substring(0, 2);
+                    if (String.Compare(no, dirno) <= 0)
+                    {
+                        Directory.Move(dirs[i], Path.Combine(
+                            Path.GetDirectoryName(dirs[i]),
+                            (int.Parse(dirno) + 1).ToString("D2")
+                            + Path.GetFileName(dirs[i]).Substring(2)));
+                    }
+                }
+
+                Directory.CreateDirectory(Path.Combine(archPath, no));
+            }
+        }
+
+        [Status(StatuTypes.Article, CompleteTypes.Finish)]
+        public void 删除条目(string artiPath)
+        {
+            string artiName = Path.GetFileName(artiPath);
+            string name = Path.GetFileName(artiPath);
+            if (Regex.IsMatch(name, @"^\d{2}\D?"))    // 开头两个为数字
+            {
+                string archPath = Path.GetDirectoryName(artiPath);
+                string[] dirs = Directory.GetDirectories(archPath, "*", SearchOption.TopDirectoryOnly);
+                string no = artiName.Substring(0, 2);
+                for (int i = 0; i < dirs.Length; i++)
+                {
+                    string dirno = Path.GetFileName(dirs[i]).Substring(0, 2);
+                    if (String.Compare(no, dirno) == 0)
+                    {
+                        Directory.Delete(dirs[i], true);
+                    }
+                    else if (String.Compare(no, dirno) < 0)
+                    {
+                        Directory.Move(dirs[i], Path.Combine(
+                            Path.GetDirectoryName(dirs[i]),
+                            (int.Parse(dirno) - 1).ToString("D2")
+                            + Path.GetFileName(dirs[i]).Substring(2)));
+                    }
+                }
+
+            }
+         }
+
+        [Status(StatuTypes.Article, CompleteTypes.Debug)]
+        public void 上移条目(string artiPath) { }
+        public void 下移条目(string artiPath) { }
         #endregion
 
         #region 封面操作
@@ -434,15 +493,13 @@ namespace BlankApp.Cli
 
         #region PDF
         [Status(StatuTypes.Pdf, CompleteTypes.Debug)]
-        public void 提取PDF首页文字(string artiPath)
+        public void 提取PDF首页文字(string pdfPath)
         {
-            if (artiPath.Equals("."))
-                artiPath = Directory.GetCurrentDirectory();
-            if( _articleService.IsArticleDirectory(artiPath))
+            if( File.Exists(pdfPath))
             {
-                Console.WriteLine(_articleService.GetPdfTxtPage0(artiPath));
-            }
+                Console.WriteLine(_articleService.GetPdfTxtPage0(pdfPath));
 
+            }
         }
 
         [Status(StatuTypes.Pdf, CompleteTypes.SubFunc)]
@@ -950,7 +1007,8 @@ namespace BlankApp.Cli
         public void 帮助()
         {
             MethodInfo[] methodInfos = typeof(Util).GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public);
-            var enumerables = methodInfos.GroupBy(m => (m.GetCustomAttribute(typeof(StatusAttribute)) as StatusAttribute).Type).ToArray();
+            methodInfos = methodInfos.Where(m => m.GetCustomAttribute<StatusAttribute>() != null).ToArray();
+            var enumerables = methodInfos.GroupBy(m => m.GetCustomAttribute<StatusAttribute>().Type).ToArray();
 
             #region 标题
             ConsoleColor curForeColor = Console.ForegroundColor;
@@ -982,9 +1040,11 @@ namespace BlankApp.Cli
 
         }
 
-
-
         #endregion
+
+
+
+
         [Status(StatuTypes.Other, CompleteTypes.Debug)]
         public void 测试()
         {

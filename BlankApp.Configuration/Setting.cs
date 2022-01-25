@@ -15,13 +15,7 @@ namespace BlankApp.Configuration
 {
     public static  class Settings
     {
-        private static string DllFile = "BlankApp.Configuration.dll";
-        private static string DllFileName = Assembly.GetExecutingAssembly().CodeBase + ".config";
-        
-        private static string ExeFileName = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-
-        private static System.Configuration.Configuration _config;
-
+        private static string DllFile = Path.Combine(System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase, @"BlankApp.Configuration.dll");
 
         private static Dictionary<string, Project> _projectSettings;
         public static Dictionary<string, Project> ProjectSettings
@@ -38,32 +32,43 @@ namespace BlankApp.Configuration
             get => _appSettings;
         }
 
+        private static Dictionary<string, string> _correctionSettings;
+
+        public static Dictionary<string, string> CorrectionSettings
+        {
+            get => _correctionSettings;
+        }
+
         public static void Empty()
         {
 
         }
 
-        public static string Get(string section, string key)
-        {
-            return  (ConfigurationManager.GetSection(section) as NameValueCollection)?.Get(key);
-        }
-
-        public static object GetSection(string section)
-        {
-            object o = null;
-            return o;
-        }
-
-
         private static void Load()
         {
+
+        }
+
+         static Settings()
+        {
+
+
+            _projectSettings = new Dictionary<string, Project>();
+            _appSettings = new Dictionary<string, string>();
+            _correctionSettings = new Dictionary<string, string>();
             System.Configuration.Configuration configuration = ConfigurationManager.OpenExeConfiguration(DllFile);
 
-            AppSettingsSection appSettingsSection = configuration.GetSection("correctionSettings") as AppSettingsSection;
+            AppSettingsSection correctionSettingsSection = configuration.GetSection("correctionSettings") as AppSettingsSection;
             ProjectSettingsSection projectSettingsSection = configuration.GetSection("projectSettings") as ProjectSettingsSection;
-            foreach (string item in appSettingsSection.Settings.AllKeys)
+
+
+            foreach (string item in configuration.AppSettings.Settings.AllKeys)
             {
-                AppSettings.Add(item, appSettingsSection.Settings[item].Value);
+                AppSettings.Add(item, configuration.AppSettings.Settings[item].Value);
+            }
+            foreach (string item in correctionSettingsSection.Settings.AllKeys)
+            {
+                CorrectionSettings.Add(item, correctionSettingsSection.Settings[item].Value);
             }
             foreach (ProjectElement item in projectSettingsSection.ProjectCollection)
             {
@@ -75,40 +80,6 @@ namespace BlankApp.Configuration
                 };
                 ProjectSettings.Add(item.Name, project);
             }
-        }
-
-         static Settings()
-        {
-
-
-            _projectSettings = new Dictionary<string, Project>();
-            _appSettings = new Dictionary<string, string>();
-            Load();
-            //XmlDocument doc = new XmlDocument();
-            //// Project
-            //_projects = new Dictionary<string, Project>();
-            //doc = new XmlDocument();
-            //doc.Load(DllFileName);
-            //XmlNodeList nodes = doc.GetElementsByTagName("project");
-            //for (int i = 0; i < nodes.Count; i++)
-            //{
-            //    Project project = new Project();
-            //    project.Name = nodes[i].Attributes["name"].Value;
-            //    project.Describe = nodes[i].Attributes["describe"].Value;
-            //    project.Remote = nodes[i].Attributes["remote"].Value;
-
-            //    _projects.Add(project.Name, project);
-            //}
-
-            //_appSettings = new Dictionary<string, string>();
-            //nodes = doc.GetElementsByTagName("add");
-            //for (int i = 0; i < nodes.Count; i++)
-            //{
-             
-            //    string key = nodes[i].Attributes["key"].Value;
-            //    string value = nodes[i].Attributes["value"].Value;
-            //    _appSettings.Add(key, value);
-            //}
         }
     }
 }

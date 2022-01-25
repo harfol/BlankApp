@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BlankApp.Service;
+using BlankApp.Service.Impl;
+using System;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Windows.Forms;
@@ -11,14 +13,13 @@ namespace BlankApp.Correction
         {
             InitializeComponent();
         }
-        NameValueCollection kvs;
-
+        private IConfigurationService _cs;
         private string correction(string str)
         {
             string trim = str.Replace(" ", "");
-            foreach (string key in kvs.AllKeys)
+            foreach (string key in _cs.CorrectionSettings.Keys)
             {
-                trim = trim.Replace(key, kvs[key]);
+                trim = trim.Replace(key, _cs.CorrectionSettings[key]);
             }
             return trim;
         }
@@ -30,8 +31,7 @@ namespace BlankApp.Correction
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
-            kvs = ConfigurationManager.GetSection("correction") as NameValueCollection;
+            _cs = new ConfigurationService();
         }
 
         private void txt_KeyUp(object sender, KeyEventArgs e)
@@ -52,6 +52,11 @@ namespace BlankApp.Correction
             {
                 int tota = txt.GetLineFromCharIndex(txt.MaxLength) + 1;
             }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            this.gb.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         }
     }
 }

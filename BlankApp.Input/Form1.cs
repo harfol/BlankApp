@@ -117,26 +117,33 @@ namespace BlankApp.Input
 
         public Form(string[] args)
         {
-            if( args.Length == 1)
+            try
             {
-                ConfigurationService cs = new ConfigurationService();
-                _historyService = new HistoryService(cs);
-                string path = args[0].Equals(".") ? Path.GetFullPath(args[0]) : args[0];
-
-                CurrentPathMsg = PathMsg.GetPathMsg(path);
-
-                if( !string.IsNullOrEmpty(CurrentPathMsg.SerialNumber) )
+                if (args.Length == 1)
                 {
-                    int num = GetLastFileNo();
-                    ArchiveInfo.No = (num+1).ToString("D2");
-                    ArchiveInfo.Page = "1";
+                    ConfigurationService cs = new ConfigurationService();
+                    _historyService = new HistoryService(cs);
+                    string path = args[0].Equals(".") ? Path.GetFullPath(args[0]) : args[0];
+
+                    CurrentPathMsg = PathMsg.GetPathMsg(path);
+
+                    if (!string.IsNullOrEmpty(CurrentPathMsg.SerialNumber))
+                    {
+                        int num = GetLastFileNo();
+                        ArchiveInfo.No = (num + 1).ToString("D2");
+                        ArchiveInfo.Page = "1";
+                    }
+
+                    BinName = cs.AppSettings["BlankAppCliBinName"] + " ";
+
+                    InitializeComponent();
+                    ListOFF();
                 }
-
-                BinName = cs.AppSettings["BlankAppCliBinName"] + " ";
-
-                InitializeComponent();
-                ListOFF();
+            }catch(Exception e)
+            {
+               
             }
+
         }
 
         private void ListON()
@@ -339,8 +346,8 @@ namespace BlankApp.Input
                         + Path.GetFileName(dirs[i]).Substring(2)));
                 }
             }
-
             Directory.CreateDirectory(Path.Combine(CurrentPathMsg.WorkPath, ArchiveInfo.ToString()));
+            this.txtNo.Text = (int.Parse(no) + 1).ToString();
         }
 
         private void btnDelete_Click(object sender, EventArgs e)

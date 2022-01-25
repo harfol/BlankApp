@@ -2,7 +2,9 @@
 using BlankApp.Service.Impl;
 using NTwain;
 using System;
+using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Unity;
 
 namespace BlankApp.Cli
@@ -10,21 +12,22 @@ namespace BlankApp.Cli
     public class Program
     {
         private static readonly IUnityContainer _container = new UnityContainer();
-        private static TwainSession _session;
 
         public static void Main(string[] args)
         {
 
             LoadContainers();
-            Util util = _container.Resolve<Util>();
+            Util util = null;
             try
             {
-                object[] objs = new object[args.Length - 1];
-                for (int i = 1; i < args.Length; i++)
-                {
-                    objs[i - 1] = args[i];
-                }
-                typeof(Util).GetMethod(args[0]).Invoke(util, objs);
+                util = _container.Resolve<Util>();
+                    object[] objs = new object[args.Length - 1];
+                    for (int i = 1; i < args.Length; i++)
+                    {
+                        objs[i - 1] = args[i];
+                    }
+                    typeof(Util).GetMethod(args[0]).Invoke(util, objs);
+
             }
             catch (Exception e)
             {
@@ -36,6 +39,10 @@ namespace BlankApp.Cli
                 {
                     Console.WriteLine("命令参数错误。");
                     util.命令帮助(typeof(Util).GetMethod(args[0]));
+                }
+                else
+                {
+                    File.WriteAllText(Path.Combine(System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "log.txt"), e.ToString());
                 }
             }
         }

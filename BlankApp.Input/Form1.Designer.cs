@@ -29,6 +29,7 @@ namespace BlankApp.Input
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form));
             this.cbTitle3 = new System.Windows.Forms.ComboBox();
             this.txtNo = new System.Windows.Forms.TextBox();
             this.txtPage = new System.Windows.Forms.TextBox();
@@ -749,6 +750,7 @@ namespace BlankApp.Input
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form";
             this.Text = "Form1";

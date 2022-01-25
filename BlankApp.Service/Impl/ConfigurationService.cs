@@ -17,8 +17,7 @@ namespace BlankApp.Service.Impl
     {
         public Dictionary<string, BlankApp.Configuration.Models.Project> ProjectSettings => Settings.ProjectSettings;
         public Dictionary<string, string> AppSettings => Settings.AppSettings;
-
-        public NameValueCollection Correction => Settings.GetSection("correction") as NameValueCollection;
+        public Dictionary<string, string> CorrectionSettings => Settings.CorrectionSettings;
 
         public object this[string str]
         { 
@@ -67,14 +66,5 @@ namespace BlankApp.Service.Impl
             return widthPairs;
         }
 
-        public string Get(string section, string key)
-        {
-            return Settings.Get(section, key);
-        }
-
-        public NameValueCollection GetSection(string section)
-        {
-            return Settings.GetSection(section) as NameValueCollection;
-        }
     }
 }

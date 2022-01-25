@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BlankApp.Service;
+using BlankApp.Service.Impl;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -49,6 +51,8 @@ namespace BlankApp.ExcelAddIn
         }
         public Dictionary<string, List<string>> SqlModels { get; set; }
         public Dictionary<string, List<string>> TempModels { get; set; }
+
+        private IConfigurationService _cs;
         #endregion
 
         #region 绑定
@@ -69,11 +73,13 @@ namespace BlankApp.ExcelAddIn
 
         public Form1(Dictionary<string, List<string>> o)
         {
+            _cs = new ConfigurationService();
             SqlModels = o;
             TempModels = new Dictionary<string, List<string>>();
-            this.Cmd = ConfigurationManager.AppSettings.Get("DefaultCmd");
-            this.TempFile = ConfigurationManager.AppSettings.Get("DefaultTempFile");
-            this.WorkingDirectory = ConfigurationManager.AppSettings.Get("DefaultWorkingDirectory");
+            
+            this.Cmd = _cs.AppSettings["DefaultCmd"];
+            this.TempFile = _cs.AppSettings["DefaultTempFile"];
+            this.WorkingDirectory = _cs.AppSettings["DefaultWorkingDirectory"];
             InitializeComponent();
             
             ShowSQL();

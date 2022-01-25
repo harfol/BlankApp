@@ -20,7 +20,7 @@ namespace BlankApp.Service
 
         string[] SplitPdf(string pdfPath);
 
-        string GetPdfTxtPage0(string artiPath);
+        string GetPdfTxtPage0(string pdfPath);
     }
 
 }
