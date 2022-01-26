@@ -93,4 +93,9 @@
     <Content Include="档案袋.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>IF "Release" == "$(ConfigurationName)" (
+   xcopy /r /y "$(TargetDir)" "\\10.165.19.187\zy\软件\App\$(OutDir)" 
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

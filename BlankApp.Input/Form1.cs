@@ -513,6 +513,7 @@ namespace BlankApp.Input
                 textBox4.Location = new System.Drawing.Point(871, 3);
                 textBox4.Size = new System.Drawing.Size(50, 21);
                 textBox4.TabIndex = 3;
+                textBox4.KeyUp += TextBox4_KeyUp;
                 textBox4.DataBindings.Add("Text", details[i], "Year");
                 // 
                 // textBox5
@@ -587,6 +588,15 @@ namespace BlankApp.Input
             #endregion
 
             Temp = details;
+        }
+
+        private void TextBox4_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                (sender as TextBox).Text = "";
+
+            }
         }
 
         private void ckbList_Click(object sender, EventArgs e)

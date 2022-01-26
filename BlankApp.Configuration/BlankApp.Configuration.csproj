@@ -51,6 +51,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="App.Debug.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="App.Release.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="history1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="history2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="history3.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>IF "Debug"== "$(ConfigurationName)" (
+   del "$(TargetPath).config"
+   copy "$(TargetDir)App.Debug.config" "$(TargetPath).config" )
+)
+IF "Release" == "$(ConfigurationName)" (
+   del "$(TargetPath).config"
+   copy "$(TargetDir)App.Release.config" "$(TargetPath).config" )
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

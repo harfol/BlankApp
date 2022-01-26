@@ -248,4 +248,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>IF "Release" == "$(ConfigurationName)" (
+   xcopy /r /y "$(TargetDir)" "\\10.165.19.187\zy\软件\App\$(OutDir)" 
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>
