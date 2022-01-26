@@ -34,7 +34,7 @@ namespace BlankApp.Service.Impl
             }
             // 获取 id
             string id = "";
-            if (name.Contains('.') || Regex.IsMatch(name, @"^\d{2}?"))
+            if (name.Contains('.') || Regex.IsMatch(name, @"^\d{2}\D?"))
             {
                 id = name.Substring(0, 2);
                 name = name.Substring(2);
@@ -181,6 +181,30 @@ namespace BlankApp.Service.Impl
             return s;
         }
 
+        public void MergePdf(string[] pdfPaths, string mergePdfPath)
+        {
+            PdfReader reader;
+            Document document = new Document();
+            PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(mergePdfPath.Replace('\\', '/'), FileMode.Create));
 
+            //document.SetPageSize(PageSize.A4.Rotate());    //如果你的模板是A4的，这里一定要是A4 
+            document.Open();
+            PdfContentByte cb = writer.DirectContent;
+            foreach (string strFileName in pdfPaths)
+            {
+                reader = new PdfReader(strFileName);
+                int iPageNum = reader.NumberOfPages;
+                for (int j = 1; j <= iPageNum; j++)
+                {
+                    Rectangle rect = reader.GetPageSize(reader.GetPageN(j));
+
+                    document.SetPageSize(rect);
+                    document.NewPage();
+                    PdfImportedPage newPage = writer.GetImportedPage(reader, j);
+                    cb.AddTemplate(newPage, 0, 0);
+                }
+            }
+            document.Close();
+        }
     }
 }

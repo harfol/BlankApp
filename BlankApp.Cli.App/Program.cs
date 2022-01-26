@@ -36,6 +36,11 @@ namespace BlankApp.Cli.App
         [Register("/文档", "%1", "下移.ico", FuncName = "下移条目")]
         public void 下移(string artiPath) { }
 
+
+        // site:https://www.cnblogs.com/Light-/p/10827751.html
+        [Register("/文档", "%1", "编辑.ico", FuncName = "合并PDF")]
+        public void 合并PDF(string artiPath) { }
+
         [Register("", "%1", "编辑.ico", BinName = "BlankApp.Input.exe")]
         public void 打开档案工具(string archPath) { }
 

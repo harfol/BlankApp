@@ -20,6 +20,8 @@ namespace BlankApp.Service
 
         string[] SplitPdf(string pdfPath);
 
+        void MergePdf(string[] pdfPaths, string mergePdfPath);
+
         string GetPdfTxtPage0(string pdfPath);
     }
 

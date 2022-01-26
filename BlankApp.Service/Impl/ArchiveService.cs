@@ -25,10 +25,6 @@ namespace BlankApp.Service.Impl
 
         public bool IsArchiveDirectory(string str)
         {
-            string first = Path.GetFileNameWithoutExtension(str);
-            //first = first.Substring(0,4);
-            //int i = 0;
-            //return Directory.Exists(str) && int.TryParse(first, out i);
             return Regex.IsMatch(str, @"^\d{4}?") || Regex.IsMatch(Path.GetFileName(str), @"^\d{4}?");
         }
 
@@ -110,14 +106,6 @@ namespace BlankApp.Service.Impl
                 #endregion*/
 
 
-        public void BuildGroup(Article[] articles)
-        {
-            if(articles.GroupBy( a => a.IsGroup ).Count() == 1 && !articles[0].IsGroup)
-            {
-
-            }
-        }
-
 
 
         #region Read()
@@ -195,56 +183,5 @@ namespace BlankApp.Service.Impl
             return archives;
         }
         #endregion
-
-        #region BuildDirectories()
-
-        public string[] CreateSingleDirectories(string archPath, ref Article[] articles)
-        {
-            List<string> paths = new List<string>();
-            foreach (Article a in articles)
-            {   
-                string name = $"{ a.Id.ToString("{0:2D}") }.{a.Mask}{{{a.Caption}}}";
-                string dir = Path.Combine(archPath, name);
-                paths.Add(Directory.CreateDirectory(dir).FullName);
-                a.ArticlePath = dir;
-            }
-            return paths.ToArray();
-        }
-        public string CreateGroupDirectories(string archPath, ref Article[] articles)
-        {
-            string names = "";
-            foreach (Article a in articles)
-            {
-                string name = $"{ a.Id.ToString("{0:2D}") }.{a.Mask}";
-                name += string.IsNullOrEmpty(a.Caption) ? "" : $"{{{ a.Caption}}}";
-                names += $"{name}-";
-            }
-            names.Remove(names.Length - 1);
-
-            string path = Path.Combine(archPath, names);
-            Array.ForEach(articles, a => a.ArticlePath = path);
-            return Directory.CreateDirectory(names).FullName;
-        }
-        public string[] CreateDirectories(string archPath, ref Article[] articles)
-        {
-            List<string> list = new List<string>();
-            foreach (var item in articles.GroupBy(a => a.IsGroup))
-            {
-                Article[] articles1 = item.ToArray();
-                if(articles1.FirstOrDefault().IsGroup)
-                {
-                    string paths = CreateGroupDirectories(archPath, ref articles1);
-                    list.Add(paths);
-                }
-                else
-                {
-                    string[] paths = CreateSingleDirectories(archPath, ref articles1);
-                    list.AddRange(paths);
-                }
-            }
-            return list.ToArray();
-        }
-        #endregion
-
     }
 }

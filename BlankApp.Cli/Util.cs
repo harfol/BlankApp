@@ -1,17 +1,12 @@
-﻿using BlankApp.Configuration;
-using BlankApp.Service;
+﻿using BlankApp.Service;
 using BlankApp.Service.Extensions;
-using BlankApp.Service.Impl;
 using BlankApp.Service.Model;
-using BlankApp.Service.Model.Object;
 using iTextSharp.text.pdf;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace BlankApp.Cli
@@ -642,7 +637,45 @@ namespace BlankApp.Cli
                  }
             }
         }
-        
+
+       private void mergePDFs(params string[] pdfs)
+        {
+            _articleService.MergePdf(pdfs.Skip(0).Take(pdfs.Length - 1).ToArray(), pdfs.Last());
+        }
+
+
+        [Status(StatuTypes.Pdf, CompleteTypes.Finish)]
+        public void 合并PDF(string pdf)
+        {
+            string path = Path.Combine(System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "tmp.txt");
+            if (File.Exists(pdf))
+            {
+                string[] pdfs = File.ReadAllLines(path);
+                if (!pdfs.Contains(pdf))
+                {
+                    string[] pdfscopy = new string[pdfs.Length + 1];
+                    for (int i = 0; i < pdfs.Length; i++)
+                    {
+                        pdfscopy[i] = pdfs[i];
+                    }
+                    pdfscopy[pdfs.Length] = pdf;
+                    File.WriteAllLines(path, pdfscopy);
+                }
+            }
+            else
+            {
+                string[] pdfs = File.ReadAllLines(path);
+                mergePDFs(pdfs);
+            }
+        }
+
+        [Status(StatuTypes.Pdf, CompleteTypes.Finish)]
+        public void 合并PDF(string pdf0, string pdf1, string pdf2) => mergePDFs(pdf0, pdf1, pdf2);
+        [Status(StatuTypes.Pdf, CompleteTypes.Finish)]
+        public void 合并PDF(string pdf0, string pdf1, string pdf2, string pdf3) => mergePDFs(pdf0, pdf1, pdf2, pdf3);
+        [Status(StatuTypes.Pdf, CompleteTypes.Finish)]
+        public void 合并PDF(string pdf0, string pdf1, string pdf2, string pdf3, string pdf4) => mergePDFs(pdf0, pdf1, pdf2, pdf3, pdf4);
+
         #endregion
 
         #region 档案操作

@@ -1,14 +1,7 @@
 ﻿using BlankApp.Configuration;
-using BlankApp.Configuration.Models;
 using BlankApp.Service.Model;
-using BlankApp.Service.Model.Object;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 
 namespace BlankApp.Service.Impl

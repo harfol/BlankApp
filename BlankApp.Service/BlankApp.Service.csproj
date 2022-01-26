@@ -135,7 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ObservableCollectionExtensions.cs" />
-    <Compile Include="Extensions\SpireHelper.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IArchiveService.cs" />
     <Compile Include="IArticleService.cs" />
@@ -143,33 +142,22 @@
     <Compile Include="IHistoryService.cs" />
     <Compile Include="IMaskService.cs" />
     <Compile Include="Impl\ArchiveService.cs" />
-    <Compile Include="Impl\ArticleService.cs" />
     <Compile Include="Impl\ArticleServiceBase.cs" />
     <Compile Include="Impl\ConfigurationService.cs" />
     <Compile Include="Impl\HistoryService.cs" />
     <Compile Include="Impl\MaskService.cs" />
-    <Compile Include="Impl\ProjectService.cs" />
     <Compile Include="Impl\RawArticleService.cs" />
     <Compile Include="Impl\ReportService.cs" />
-    <Compile Include="Impl\Services.cs" />
     <Compile Include="Impl\WordService.cs" />
-    <Compile Include="IProjectService.cs" />
     <Compile Include="IReportService.cs" />
-    <Compile Include="IServices.cs" />
     <Compile Include="IWordService.cs" />
     <Compile Include="Model\Archive.cs" />
     <Compile Include="Model\Article.cs" />
     <Compile Include="Model\ArticleToken.cs" />
     <Compile Include="Model\Catalog.cs" />
     <Compile Include="Model\CoverToken.cs" />
-    <Compile Include="Model\DB\Archive.cs" />
-    <Compile Include="Model\DB\Person.cs" />
-    <Compile Include="Model\DB\Project.cs" />
     <Compile Include="Model\Detail.cs" />
     <Compile Include="Model\NotificationObject.cs" />
-    <Compile Include="Model\Object\ProjectObject.cs" />
-    <Compile Include="Model\Object\TitleObject.cs" />
-    <Compile Include="Model\Project.cs" />
     <Compile Include="Model\ReportMsg.cs" />
     <Compile Include="Model\TitleToken.cs" />
     <Compile Include="Model\WidthPair.cs" />

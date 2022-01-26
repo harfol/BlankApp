@@ -11,11 +11,9 @@ namespace BlankApp.Service.Impl
 {
     public class RawArticleService : ArticleServiceBase
     {
-        private IMaskService _ms;
-
-        public RawArticleService(IMaskService ms)
+        public RawArticleService()
         {
-            this._ms = ms;
+
         }
         public override string GetTxtFileName(string artiPath)
         {
@@ -71,14 +69,9 @@ namespace BlankApp.Service.Impl
 
         public override Article[] Read(string artiPath)
         {
-            //string txt = GetTxtFileName(artiPath);
-            //string[] pdfs = GetPdfFileName(artiPath);
             string[] files = Directory.GetFiles(artiPath, "*", SearchOption.TopDirectoryOnly);
             string[] pdfs = files.Where(f => f.EndsWith(".pdf")).ToArray();
             string txt = files.Where(f => f.EndsWith(".txt")).FirstOrDefault();
-
-            //string[] pdfs = Directory.GetFiles(artiPath, "*.pdf", SearchOption.TopDirectoryOnly).ToArray();
-            //string txt = Directory.GetFiles(artiPath, "*.txt", SearchOption.TopDirectoryOnly).FirstOrDefault();
 
             List<Article> articles = new List<Article>();
             if (!string.IsNullOrEmpty(txt))
@@ -105,8 +98,6 @@ namespace BlankApp.Service.Impl
                 }
             }
             return articles.ToArray();
-
-            //return Read(files);
         }
 
     }

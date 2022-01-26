@@ -381,7 +381,7 @@ namespace BlankApp.Input
 
         private void btnTxtBuild_Click(object sender, EventArgs e)
         {
-            ArticleServiceBase articleServiceBase = new ArticleService();
+            ArticleServiceBase articleServiceBase = new RawArticleService();
 
             foreach (ArticleMsg arti in Temp)
             {
@@ -433,7 +433,7 @@ namespace BlankApp.Input
             ArticleMsg[] details = null;
        
             #region   搜索文件夹，初始化details
-            ArticleServiceBase articleServiceBase = new ArticleService();
+            ArticleServiceBase articleServiceBase = new RawArticleService();
             string[] dirs = Directory.GetDirectories(CurrentPathMsg.WorkPath, "*", SearchOption.TopDirectoryOnly);
             Array.Sort<string>(dirs);
             details = new ArticleMsg[dirs.Length];
