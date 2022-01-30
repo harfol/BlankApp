@@ -42,7 +42,7 @@ namespace BlankApp.Cli
                 }
                 else
                 {
-                    File.WriteAllText(Path.Combine(System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "log.txt"), e.ToString());
+                    File.WriteAllText(Path.Combine(System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "cli_log.txt"), e.ToString());
                 }
             }
         }

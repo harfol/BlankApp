@@ -17,7 +17,10 @@ namespace BlankApp.Input
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form(args));
+           if( args.Length > 0)
+            {
+                Application.Run(new Form(args));
+            }
         }
     }
 }

@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlankApp.Correction", "Blan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlankApp.Cli.App", "BlankApp.Cli.App\BlankApp.Cli.App.csproj", "{52FC2113-AB21-4F7B-AD1B-3649ABBF7EA6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlankApp.Package", "BlankApp.Package\BlankApp.Package.csproj", "{56834391-1DAE-4551-B6C8-98CD01D094D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,8 @@ Global
 		{52FC2113-AB21-4F7B-AD1B-3649ABBF7EA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52FC2113-AB21-4F7B-AD1B-3649ABBF7EA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52FC2113-AB21-4F7B-AD1B-3649ABBF7EA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56834391-1DAE-4551-B6C8-98CD01D094D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56834391-1DAE-4551-B6C8-98CD01D094D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

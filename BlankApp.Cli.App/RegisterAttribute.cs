@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BlankApp.Cli.App
 {
-
+    public enum LocationType
+    {
+        Desktop = 0x01,
+        File = 0x02,
+        Folder = 0x04,
+        FileAndFolder = 0x08,
+        FolderAndEmpty = 0x10
+    }
 
     public enum RegisterType
     {
@@ -16,7 +24,10 @@ namespace BlankApp.Cli.App
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = true)]
     public class RegisterAttribute : Attribute
     {
-        private string _multilevel;
+
+
+
+        private string _multilevel = "";
         public string Multilevel
         {
             get { return _multilevel; }
@@ -31,7 +42,7 @@ namespace BlankApp.Cli.App
             set { _icon = value; }
         }
 
-        private RegisterType _type;
+        private RegisterType _type = RegisterType.Func;
 
         public RegisterType Type
         {
@@ -39,14 +50,14 @@ namespace BlankApp.Cli.App
             set { _type = value; }
         }
 
-        private bool _useNonFuncName;
+        private bool _useNonFuncName = false;
         public bool UseNonFuncName
         {
             get { return _useNonFuncName; }
             set { _useNonFuncName = value; }
         }
 
-        private bool _useProcessIcon;
+        private bool _useProcessIcon = false;
 
         public bool UseProcessIcon
         {
@@ -79,18 +90,22 @@ namespace BlankApp.Cli.App
         }
 
 
-        public RegisterAttribute(string multilevel, string paraments = "", string icon=null, RegisterType type=RegisterType.Func,  
-            bool useNonFuncName =false, bool useProcessIcon =false, string funcName=null, string binName=null)
+
+        private LocationType _location;
+
+        public LocationType Location
         {
-            this._multilevel = multilevel;
-            this._icon = icon;
-            this._type = type;
-            this._useNonFuncName = useNonFuncName;
-            this._paraments = paraments;
-            this._useProcessIcon = useProcessIcon;
-            this._funcName = funcName;
-            this._binName = binName;
+            get { return _location; }
+            set { _location = value; }
         }
+
+        private bool _isSingleFunc = false;
+
+        public RegisterAttribute() 
+        {
+            this._binName = Path.GetFileName( typeof(RegisterAttribute).Assembly.Location );
+        }
+        
 
         public RegisterAttribute Clone()
         {
@@ -103,12 +118,9 @@ namespace BlankApp.Cli.App
                 Type = this._type,
                 Icon = this._icon,
                 Multilevel = this._multilevel,
-                BinName = this._binName
+                BinName = this._binName,
+                Location = this._location,
             };
-        }
-        public RegisterAttribute()
-        {
-
         }
     }
 }

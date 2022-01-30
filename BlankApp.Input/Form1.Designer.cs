@@ -54,7 +54,6 @@ namespace BlankApp.Input
             this.btnBuildCatalog = new System.Windows.Forms.Button();
             this.btnBuildCover = new System.Windows.Forms.Button();
             this.bthCopyPDF = new System.Windows.Forms.Button();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.btnCopyCatalog = new System.Windows.Forms.Button();
             this.btnCopyCover = new System.Windows.Forms.Button();
             this.btnSummary = new System.Windows.Forms.Button();
@@ -94,10 +93,10 @@ namespace BlankApp.Input
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.pbLoad = new System.Windows.Forms.ProgressBar();
-            this.groupBox1.SuspendLayout();
+            this.btnMergePDF = new System.Windows.Forms.Button();
+            this.btnSelectPDF = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.gpbDanger.SuspendLayout();
             this.lypList.SuspendLayout();
@@ -112,28 +111,29 @@ namespace BlankApp.Input
             // cbTitle3
             // 
             this.cbTitle3.FormattingEnabled = true;
-            this.cbTitle3.Location = new System.Drawing.Point(505, 20);
+            this.cbTitle3.Location = new System.Drawing.Point(501, 7);
             this.cbTitle3.Name = "cbTitle3";
             this.cbTitle3.Size = new System.Drawing.Size(499, 20);
             this.cbTitle3.TabIndex = 0;
             // 
             // txtNo
             // 
-            this.txtNo.Location = new System.Drawing.Point(42, 19);
+            this.txtNo.Location = new System.Drawing.Point(38, 6);
             this.txtNo.Name = "txtNo";
             this.txtNo.Size = new System.Drawing.Size(30, 21);
             this.txtNo.TabIndex = 1;
             // 
             // txtPage
             // 
-            this.txtPage.Location = new System.Drawing.Point(1014, 20);
+            this.txtPage.Location = new System.Drawing.Point(1008, 6);
             this.txtPage.Name = "txtPage";
             this.txtPage.Size = new System.Drawing.Size(30, 21);
             this.txtPage.TabIndex = 2;
+            this.txtPage.TextChanged += new System.EventHandler(this.txtPage_TextChanged);
             // 
             // btnCreate
             // 
-            this.btnCreate.Location = new System.Drawing.Point(1050, 19);
+            this.btnCreate.Location = new System.Drawing.Point(1045, 6);
             this.btnCreate.Name = "btnCreate";
             this.btnCreate.Size = new System.Drawing.Size(49, 23);
             this.btnCreate.TabIndex = 3;
@@ -143,14 +143,7 @@ namespace BlankApp.Input
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.cbTitle2);
-            this.groupBox1.Controls.Add(this.cbTitle1);
-            this.groupBox1.Controls.Add(this.btnReadAgain);
-            this.groupBox1.Controls.Add(this.txtNo);
-            this.groupBox1.Controls.Add(this.btnCreate);
-            this.groupBox1.Controls.Add(this.cbTitle3);
-            this.groupBox1.Controls.Add(this.txtPage);
-            this.groupBox1.Location = new System.Drawing.Point(6, 5);
+            this.groupBox1.Location = new System.Drawing.Point(279, 80);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(1111, 50);
             this.groupBox1.TabIndex = 4;
@@ -159,7 +152,7 @@ namespace BlankApp.Input
             // cbTitle2
             // 
             this.cbTitle2.FormattingEnabled = true;
-            this.cbTitle2.Location = new System.Drawing.Point(173, 20);
+            this.cbTitle2.Location = new System.Drawing.Point(169, 7);
             this.cbTitle2.Name = "cbTitle2";
             this.cbTitle2.Size = new System.Drawing.Size(326, 20);
             this.cbTitle2.TabIndex = 6;
@@ -167,14 +160,14 @@ namespace BlankApp.Input
             // cbTitle1
             // 
             this.cbTitle1.FormattingEnabled = true;
-            this.cbTitle1.Location = new System.Drawing.Point(78, 20);
+            this.cbTitle1.Location = new System.Drawing.Point(74, 7);
             this.cbTitle1.Name = "cbTitle1";
             this.cbTitle1.Size = new System.Drawing.Size(89, 20);
             this.cbTitle1.TabIndex = 5;
             // 
             // btnReadAgain
             // 
-            this.btnReadAgain.Location = new System.Drawing.Point(10, 18);
+            this.btnReadAgain.Location = new System.Drawing.Point(6, 5);
             this.btnReadAgain.Name = "btnReadAgain";
             this.btnReadAgain.Size = new System.Drawing.Size(26, 23);
             this.btnReadAgain.TabIndex = 4;
@@ -203,7 +196,7 @@ namespace BlankApp.Input
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.txtMesure);
-            this.groupBox2.Location = new System.Drawing.Point(6, 61);
+            this.groupBox2.Location = new System.Drawing.Point(6, 34);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(596, 70);
             this.groupBox2.TabIndex = 5;
@@ -302,7 +295,7 @@ namespace BlankApp.Input
             this.groupBox3.Controls.Add(this.btnBuildCatalog);
             this.groupBox3.Controls.Add(this.btnBuildCover);
             this.groupBox3.Controls.Add(this.bthCopyPDF);
-            this.groupBox3.Location = new System.Drawing.Point(608, 61);
+            this.groupBox3.Location = new System.Drawing.Point(608, 34);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(308, 43);
             this.groupBox3.TabIndex = 6;
@@ -338,21 +331,9 @@ namespace BlankApp.Input
             this.bthCopyPDF.UseVisualStyleBackColor = true;
             this.bthCopyPDF.Click += new System.EventHandler(this.bthCopyPDF_Click);
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.btnCopyCatalog);
-            this.groupBox4.Controls.Add(this.btnCopyCover);
-            this.groupBox4.Controls.Add(this.btnSummary);
-            this.groupBox4.Controls.Add(this.txtMask);
-            this.groupBox4.Location = new System.Drawing.Point(608, 103);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(508, 44);
-            this.groupBox4.TabIndex = 7;
-            this.groupBox4.TabStop = false;
-            // 
             // btnCopyCatalog
             // 
-            this.btnCopyCatalog.Location = new System.Drawing.Point(237, 13);
+            this.btnCopyCatalog.Location = new System.Drawing.Point(880, 112);
             this.btnCopyCatalog.Name = "btnCopyCatalog";
             this.btnCopyCatalog.Size = new System.Drawing.Size(71, 23);
             this.btnCopyCatalog.TabIndex = 3;
@@ -362,7 +343,7 @@ namespace BlankApp.Input
             // 
             // btnCopyCover
             // 
-            this.btnCopyCover.Location = new System.Drawing.Point(168, 13);
+            this.btnCopyCover.Location = new System.Drawing.Point(811, 112);
             this.btnCopyCover.Name = "btnCopyCover";
             this.btnCopyCover.Size = new System.Drawing.Size(63, 23);
             this.btnCopyCover.TabIndex = 2;
@@ -372,7 +353,7 @@ namespace BlankApp.Input
             // 
             // btnSummary
             // 
-            this.btnSummary.Location = new System.Drawing.Point(314, 13);
+            this.btnSummary.Location = new System.Drawing.Point(957, 112);
             this.btnSummary.Name = "btnSummary";
             this.btnSummary.Size = new System.Drawing.Size(75, 23);
             this.btnSummary.TabIndex = 1;
@@ -382,16 +363,16 @@ namespace BlankApp.Input
             // 
             // txtMask
             // 
-            this.txtMask.Location = new System.Drawing.Point(8, 15);
+            this.txtMask.Location = new System.Drawing.Point(30, 112);
             this.txtMask.Name = "txtMask";
-            this.txtMask.Size = new System.Drawing.Size(154, 21);
+            this.txtMask.Size = new System.Drawing.Size(775, 21);
             this.txtMask.TabIndex = 0;
             // 
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.btnNext);
             this.groupBox5.Controls.Add(this.btnPrev);
-            this.groupBox5.Location = new System.Drawing.Point(922, 61);
+            this.groupBox5.Location = new System.Drawing.Point(922, 35);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(194, 43);
             this.groupBox5.TabIndex = 9;
@@ -424,7 +405,7 @@ namespace BlankApp.Input
             this.gpbDanger.Enabled = false;
             this.gpbDanger.Location = new System.Drawing.Point(1122, 28);
             this.gpbDanger.Name = "gpbDanger";
-            this.gpbDanger.Size = new System.Drawing.Size(72, 119);
+            this.gpbDanger.Size = new System.Drawing.Size(72, 76);
             this.gpbDanger.TabIndex = 10;
             this.gpbDanger.TabStop = false;
             // 
@@ -454,7 +435,7 @@ namespace BlankApp.Input
             this.ckbList.AutoSize = true;
             this.ckbList.Checked = true;
             this.ckbList.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ckbList.Location = new System.Drawing.Point(6, 133);
+            this.ckbList.Location = new System.Drawing.Point(9, 115);
             this.ckbList.Name = "ckbList";
             this.ckbList.Size = new System.Drawing.Size(15, 14);
             this.ckbList.TabIndex = 12;
@@ -707,6 +688,7 @@ namespace BlankApp.Input
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.flowLayoutPanel2);
+            this.groupBox6.Controls.Add(this.groupBox1);
             this.groupBox6.Location = new System.Drawing.Point(6, 153);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(1188, 83);
@@ -728,40 +710,67 @@ namespace BlankApp.Input
             // 
             // pbLoad
             // 
-            this.pbLoad.Location = new System.Drawing.Point(27, 133);
+            this.pbLoad.Location = new System.Drawing.Point(608, 90);
             this.pbLoad.Name = "pbLoad";
-            this.pbLoad.Size = new System.Drawing.Size(575, 14);
+            this.pbLoad.Size = new System.Drawing.Size(508, 14);
             this.pbLoad.TabIndex = 15;
+            // 
+            // btnMergePDF
+            // 
+            this.btnMergePDF.Location = new System.Drawing.Point(1119, 112);
+            this.btnMergePDF.Name = "btnMergePDF";
+            this.btnMergePDF.Size = new System.Drawing.Size(75, 23);
+            this.btnMergePDF.TabIndex = 4;
+            this.btnMergePDF.Text = "合并PDF";
+            this.btnMergePDF.UseVisualStyleBackColor = true;
+            this.btnMergePDF.Click += new System.EventHandler(this.btnMergePDF_Click);
+            // 
+            // btnSelectPDF
+            // 
+            this.btnSelectPDF.Location = new System.Drawing.Point(1038, 112);
+            this.btnSelectPDF.Name = "btnSelectPDF";
+            this.btnSelectPDF.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectPDF.TabIndex = 16;
+            this.btnSelectPDF.Text = "选择PDF";
+            this.btnSelectPDF.UseVisualStyleBackColor = true;
+            this.btnSelectPDF.Click += new System.EventHandler(this.btnSelectPDF_Click);
             // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1204, 551);
+            this.Controls.Add(this.btnSelectPDF);
+            this.Controls.Add(this.txtMask);
+            this.Controls.Add(this.btnCopyCover);
+            this.Controls.Add(this.btnCopyCatalog);
+            this.Controls.Add(this.btnMergePDF);
+            this.Controls.Add(this.btnCreate);
+            this.Controls.Add(this.btnSummary);
+            this.Controls.Add(this.cbTitle2);
+            this.Controls.Add(this.txtPage);
+            this.Controls.Add(this.cbTitle3);
             this.Controls.Add(this.pbLoad);
+            this.Controls.Add(this.cbTitle1);
             this.Controls.Add(this.groupBox6);
+            this.Controls.Add(this.txtNo);
+            this.Controls.Add(this.btnReadAgain);
             this.Controls.Add(this.gbList);
             this.Controls.Add(this.ckbList);
             this.Controls.Add(this.ckbDanger);
             this.Controls.Add(this.gpbDanger);
             this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.gpbDanger.ResumeLayout(false);
             this.lypList.ResumeLayout(false);
@@ -798,7 +807,6 @@ namespace BlankApp.Input
         private System.Windows.Forms.Button btnBuildCatalog;
         private System.Windows.Forms.Button btnBuildCover;
         private System.Windows.Forms.Button bthCopyPDF;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Button btnSummary;
         private System.Windows.Forms.TextBox txtMask;
         private System.Windows.Forms.Button btnCopyCatalog;
@@ -847,6 +855,8 @@ namespace BlankApp.Input
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.ProgressBar pbLoad;
         private System.Windows.Forms.Label lbLabel;
+        private System.Windows.Forms.Button btnMergePDF;
+        private System.Windows.Forms.Button btnSelectPDF;
     }
 }
 

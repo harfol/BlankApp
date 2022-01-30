@@ -21,7 +21,7 @@ namespace BlankApp.Input
 
     public partial class Form : System.Windows.Forms.Form
     {
-        public class PathMsg 
+        public class PathMsg
         {
             public int ProNumber { get; set; }
             public int ArchNumber { get; set; }
@@ -38,19 +38,19 @@ namespace BlankApp.Input
                 string archName = Path.GetFileName(path);
                 string proName = Path.GetFileName(Path.GetDirectoryName(path));
                 int num;
-                if (archName.Length > 4 &&  int.TryParse(archName.Substring(0, 4), out num))
+                if (archName.Length > 4 && int.TryParse(archName.Substring(0, 4), out num))
                 {
                     pathMsg.ArchNumber = num;
                 }
-                if (proName.Length >= 5 
-                    && proName.Substring(0, 2).Equals("ZY", StringComparison.InvariantCultureIgnoreCase) 
+                if (proName.Length >= 5
+                    && proName.Substring(0, 2).Equals("ZY", StringComparison.InvariantCultureIgnoreCase)
                     && int.TryParse(proName.Substring(2, 3), out num))
                 {
                     pathMsg.ProNumber = num;
                 }
-                
 
-                if(pathMsg.ProNumber != 0 && pathMsg.ArchNumber != 0)
+
+                if (pathMsg.ProNumber != 0 && pathMsg.ArchNumber != 0)
                 {
                     pathMsg.SerialNumber = $"ZY{pathMsg.ProNumber:D3}{pathMsg.ArchNumber:D4}";
                 }
@@ -67,7 +67,7 @@ namespace BlankApp.Input
             public int StartPage
             {
                 get { return _startPage; }
-                set 
+                set
                 {
                     SetProperty(ref _startPage, value);
                     this.PageNumber = $"{this._startPage}" + ((_startPage != _endPage && _endPage != 0) ? $"-{_endPage}" : "");
@@ -84,14 +84,14 @@ namespace BlankApp.Input
                     this.PageNumber = $"{this._startPage}" + ((_startPage != _endPage && _endPage != 0) ? $"-{_endPage}" : "");
                 }
             }
-           
+
             private bool _isNotBuild;
             public bool IsNotBuild
             {
                 get { return _isNotBuild; }
                 set { SetProperty(ref _isNotBuild, value); }
             }
-            
+
             private Color _foreColor;
             public Color ForeColor
             {
@@ -139,9 +139,10 @@ namespace BlankApp.Input
                     InitializeComponent();
                     ListOFF();
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
-               
+                File.WriteAllText(Path.Combine(System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "input_log.txt"), e.ToString());
             }
 
         }
@@ -189,10 +190,10 @@ namespace BlankApp.Input
 
             this.txtNo.DataBindings.Add("Text", ArchiveInfo, "No");
             this.txtPage.DataBindings.Add("Text", ArchiveInfo, "Page");
-           
+
             this.Text = CurrentPathMsg.WorkPath;
 
-            if( !string.IsNullOrEmpty(CurrentPathMsg.SerialNumber))
+            if (!string.IsNullOrEmpty(CurrentPathMsg.SerialNumber))
             {
                 this.txtNumber.Text = CurrentPathMsg.SerialNumber;
             }
@@ -214,9 +215,9 @@ namespace BlankApp.Input
         public void Prev()
         {
 
-            if (!string.IsNullOrEmpty(CurrentPathMsg.SerialNumber) && CurrentPathMsg.ArchNumber > 1 )
+            if (!string.IsNullOrEmpty(CurrentPathMsg.SerialNumber) && CurrentPathMsg.ArchNumber > 1)
             {
-                int an = CurrentPathMsg.ArchNumber -1;
+                int an = CurrentPathMsg.ArchNumber - 1;
                 string prev = Directory.GetDirectories(CurrentPathMsg.ParentPath, an.ToString("D4") + "*").FirstOrDefault();
                 if (!string.IsNullOrWhiteSpace(prev))
                 {
@@ -321,7 +322,7 @@ namespace BlankApp.Input
         private void btnNext_Click(object sender, EventArgs e)
         {
             Next();
-            
+
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
@@ -330,7 +331,7 @@ namespace BlankApp.Input
         }
 
         private void btnInsert_Click(object sender, EventArgs e)
-        {   
+        {
 
 
             string[] dirs = Directory.GetDirectories(CurrentPathMsg.WorkPath, "*", SearchOption.TopDirectoryOnly);
@@ -338,7 +339,7 @@ namespace BlankApp.Input
             for (int i = dirs.Length - 1; i >= 0; i--)
             {
                 string dirno = Path.GetFileName(dirs[i]).Substring(0, 2);
-                if ( String.Compare( no, dirno ) <= 0)
+                if (String.Compare(no, dirno) <= 0)
                 {
                     Directory.Move(dirs[i], Path.Combine(
                         Path.GetDirectoryName(dirs[i]),
@@ -361,7 +362,7 @@ namespace BlankApp.Input
                 {
                     Directory.Delete(dirs[i], true);
                 }
-                else if(String.Compare(no, dirno) < 0)
+                else if (String.Compare(no, dirno) < 0)
                 {
                     Directory.Move(dirs[i], Path.Combine(
                         Path.GetDirectoryName(dirs[i]),
@@ -395,7 +396,8 @@ namespace BlankApp.Input
                     arti.Txt = txt;
                     arti.ForeColor = Color.LimeGreen;
                     // arti.IsNotBuild = false;
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     // 移动文件可能会报错
                 }
@@ -420,7 +422,7 @@ namespace BlankApp.Input
         public ArticleMsg[] Temp { get; set; }
         private void btnReFlashList_Click(object sender, EventArgs e)
         {
-            if ( CurrentPathMsg.ArchNumber <= 0 ) return;
+            if (CurrentPathMsg.ArchNumber <= 0) return;
 
             // 进度条
             this.pbLoad.Minimum = 0;
@@ -431,7 +433,7 @@ namespace BlankApp.Input
 
             Temp = null;
             ArticleMsg[] details = null;
-       
+
             #region   搜索文件夹，初始化details
             ArticleServiceBase articleServiceBase = new RawArticleService();
             string[] dirs = Directory.GetDirectories(CurrentPathMsg.WorkPath, "*", SearchOption.TopDirectoryOnly);
@@ -611,6 +613,57 @@ namespace BlankApp.Input
             }
         }
 
+        private void txtPage_TextChanged(object sender, EventArgs e)
+        {
 
+        }
+
+        private void btnMergePDF_Click(object sender, EventArgs e)
+        {
+            string[] pdfs = this.txtMask.Text.Trim().Split(';');
+            if (null != pdfs && pdfs.Length > 1)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.InitialDirectory = CurrentPathMsg.WorkPath;
+                saveFileDialog.Filter = "pdf files (*.pdf)|*.pdf|All files (*.*)|*.*";
+                saveFileDialog.FilterIndex = 1;
+                saveFileDialog.RestoreDirectory = true;
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string fileName = saveFileDialog.FileName;
+                    Process.Start("cmd", "/C" + BinName + $"合并PDF{pdfs.Length-1} {this.txtMask.Text.Replace(';', ' ')}  {saveFileDialog.FileName}");
+                    if( File.Exists(saveFileDialog.FileName))
+                    {
+                        this.txtMask.Text = "";
+                    }
+                }
+            }
+        }
+
+        private void btnSelectPDF_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = CurrentPathMsg.WorkPath;
+                openFileDialog.Filter = "pdf files (*.pdf)|*.txt|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Multiselect = true;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string[] pdfs = openFileDialog.FileNames;
+                    foreach (string pdf in pdfs)
+                    {
+                        string name = Path.GetFileName(pdf);
+                        if (File.Exists(Path.Combine(CurrentPathMsg.WorkPath, name)) && pdf.EndsWith(".pdf"))
+                        {
+                            this.txtMask.Text += $"{pdf};";
+                        }
+                    }
+                }
+            }
+        }
     }
 }
+

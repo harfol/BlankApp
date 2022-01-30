@@ -57,7 +57,7 @@ namespace BlankApp.ExcelAddIn
             // 
             // btnCreateSQL
             // 
-            this.btnCreateSQL.Label = "打开SQL命令窗口";
+            this.btnCreateSQL.Label = "生成SQL命令";
             this.btnCreateSQL.Name = "btnCreateSQL";
             this.btnCreateSQL.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnCreateSQL_Click);
             // 

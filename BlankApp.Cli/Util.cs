@@ -195,7 +195,7 @@ namespace BlankApp.Cli
                 {
                     File.Delete(file);
                 }
-                Console.WriteLine("删除成功");
+                Console.WriteLine("删除TXT成功");
             } 
             
         }
@@ -643,39 +643,18 @@ namespace BlankApp.Cli
             _articleService.MergePdf(pdfs.Skip(0).Take(pdfs.Length - 1).ToArray(), pdfs.Last());
         }
 
-
         [Status(StatuTypes.Pdf, CompleteTypes.Finish)]
-        public void 合并PDF(string pdf)
-        {
-            string path = Path.Combine(System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "tmp.txt");
-            if (File.Exists(pdf))
-            {
-                string[] pdfs = File.ReadAllLines(path);
-                if (!pdfs.Contains(pdf))
-                {
-                    string[] pdfscopy = new string[pdfs.Length + 1];
-                    for (int i = 0; i < pdfs.Length; i++)
-                    {
-                        pdfscopy[i] = pdfs[i];
-                    }
-                    pdfscopy[pdfs.Length] = pdf;
-                    File.WriteAllLines(path, pdfscopy);
-                }
-            }
-            else
-            {
-                string[] pdfs = File.ReadAllLines(path);
-                mergePDFs(pdfs);
-            }
-        }
-
+        public void 合并PDF2(string pdf0, string pdf1, string pdf2)
+            => mergePDFs(pdf0, pdf1, pdf2);
         [Status(StatuTypes.Pdf, CompleteTypes.Finish)]
-        public void 合并PDF(string pdf0, string pdf1, string pdf2) => mergePDFs(pdf0, pdf1, pdf2);
+        public void 合并PDF3(string pdf0, string pdf1, string pdf2, string pdf3) 
+            => mergePDFs(pdf0, pdf1, pdf2, pdf3);
         [Status(StatuTypes.Pdf, CompleteTypes.Finish)]
-        public void 合并PDF(string pdf0, string pdf1, string pdf2, string pdf3) => mergePDFs(pdf0, pdf1, pdf2, pdf3);
+        public void 合并PDF4(string pdf0, string pdf1, string pdf2, string pdf3, string pdf4) 
+            => mergePDFs(pdf0, pdf1, pdf2, pdf3, pdf4);
         [Status(StatuTypes.Pdf, CompleteTypes.Finish)]
-        public void 合并PDF(string pdf0, string pdf1, string pdf2, string pdf3, string pdf4) => mergePDFs(pdf0, pdf1, pdf2, pdf3, pdf4);
-
+        public void 合并PDF5(string pdf0, string pdf1, string pdf2, string pdf3, string pdf4, string pdf5) 
+            => mergePDFs(pdf0, pdf1, pdf2, pdf3, pdf4, pdf5);
         #endregion
 
         #region 档案操作
@@ -922,6 +901,27 @@ namespace BlankApp.Cli
         
         }
 
+        [Status(StatuTypes.Other, CompleteTypes.Finish)]
+        public void 逆向(string archPath)
+        {
+            archPath = GetTargetPath(archPath);
+
+            if (_archiveService.IsArchiveDirectory(archPath))
+            {
+                string[] pdfs = Directory.GetFiles(archPath, "*.pdf", SearchOption.AllDirectories);
+                foreach (string pdf in pdfs)
+                {
+                    string parent = Path.GetFileName(Path.GetDirectoryName(pdf));
+                    string name = Path.GetFileName(pdf);
+                    if( Regex.IsMatch(parent, @"\d{2}\D*"))
+                    {
+                        File.Move(pdf, Path.Combine(archPath, parent.Substring(0, 2)) + ".pdf");
+                        Console.WriteLine($"move {name} ../{parent.Substring(0, 2)}");
+                    }
+                }
+                删除TXT文件(archPath);
+            }
+        }
 
         private void ColorMsgLine(string str, string mask, ConsoleColor color)
         {

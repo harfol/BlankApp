@@ -9,6 +9,9 @@ namespace BlankApp.ExcelAddIn
 {
     public partial class Ribbon1
     {
+
+
+        private Form1 _form;
         public Application App { get; private set; } = null;
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
@@ -44,7 +47,19 @@ namespace BlankApp.ExcelAddIn
                     o.Add(dbname, list);
                 }
             }
-            new Form1(o).Show();
+            if( _form ==null || _form.IsClose )
+            {
+                _form = new Form1(o);
+                _form.Show();
+                _form.IsClose = false;
+            }
+            else
+            {
+                _form.SqlModels = o;
+                _form.TempModels.Clear();
+                _form.ShowSQL();
+                _form.Activate();
+            }
         }
     }
 }

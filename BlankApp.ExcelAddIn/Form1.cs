@@ -66,6 +66,8 @@ namespace BlankApp.ExcelAddIn
         }
         #endregion
 
+
+        public bool IsClose { get; set; } = true;
         public Form1()
         {
             InitializeComponent();
@@ -92,7 +94,7 @@ namespace BlankApp.ExcelAddIn
             this.txtMsg.DataBindings.Add("Text", this, "Msg");
             this.txtTempFile.DataBindings.Add("Text", this, "TempFile");
             this.txtWorkingDirectory.DataBindings.Add("Text", this, "WorkingDirectory");
-
+            this.FormClosed += (s, args) => this.IsClose = true;
             // 加选项
             foreach (var item in SqlModels)
             {
@@ -104,7 +106,7 @@ namespace BlankApp.ExcelAddIn
                 this.flp.Controls.Add(checkBox);
             }
         }
-        private void ShowSQL()
+        public void ShowSQL()
         {
             /* 做索引的字段要放在 SqlModels 的第一个。 */
             StringBuilder sb = new StringBuilder();
